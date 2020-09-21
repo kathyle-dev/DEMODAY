@@ -1,0 +1,80 @@
+/******** GENERAL STYLING ********* */
+*{
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  padding-top:25px;
+  word-wrap:break-word;
+  height:100vh;
+  background-color: #40c4ff;
+  padding-bottom:25px;
+}
+/******** HOME PAGE STYLING ********* */
+
+
+
+
+
+/******** LOGIN PAGE STYLING ********* */
+.login{
+  display: flex;
+  flex-direction: column;
+  gap:10px;
+  border: 3px solid black;
+  border-radius: 8px;
+  width: 60%;
+  padding: 1rem 1.5rem 1rem 1.5rem;
+}
+
+/******** SIGN UP PAGE STYLING ********* */
+
+.signUp{
+  display: flex;
+  flex-direction: column;
+  gap:10px;
+  border: 3px solid black;
+  border-radius: 8px;
+  width: 60%;
+  padding: 1rem 1.5rem 1rem 1.5rem;
+}
+.signUp h1{
+  text-align: center;
+}
+.signUp form{
+  display: flex;
+  flex-direction: column;
+}
+.signUp button{
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1rem;
+}
+/******** PROFILE PAGE STYLING ********* */
+nav{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap:20px;
+}
+nav form{
+    display: flex;
+    justify-content: flex-end;
+}
+nav ul{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap:20px;
+}
+.feed{
+  border: 3px solid black;
+  width: 100%;
+}
+.posts{
+  list-style: none;
+  border: 3px solid gold;
+  padding: 1.5rem;
+}

@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+    <title>DEMO DAY</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="signUp container">
+
+      <h1><span class="fa fa-sign-in"></span>About You</h1>
+
+      <% if (message.length > 0) { %>
+          <div class="alert alert-danger"><%= message %></div>
+      <% } %>
+
+      <!-- SIGN UP FORM -->
+    <% if (user.local.email) { %>
+      <form action="/signupForm" method="post">
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">First Name</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="firstname">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">Last Name</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="lastname">
+          </div>
+        </div>
+        <fieldset class="form-group">
+          <div class="row">
+            <label class="col-form-label col-sm-2 pt-0">Who You Are</label>
+            <div class="col-sm-10">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="who" value="business" checked>
+                <label class="form-check-label" for="gridRadios1">
+                  Business
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="who" value="mentor">
+                <label class="form-check-label" for="gridRadios2">
+                  Mentor
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="who" value="mentee">
+                <label class="form-check-label" for="gridRadios3">
+                  Mentee
+                </label>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        <div class="form-group row">
+          <label class="col-form-label col-sm-2 pt-0">Key Goals?</label>
+          <div class="col-sm-10">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="goals" value="job">
+              <label class="form-check-label">
+                Find a Job
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="goals" value="talent">
+              <label class="form-check-label">
+                Find talent
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="goals" value="collaborate">
+              <label class="form-check-label">
+                Collaborate with Businesses
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="goals" value="meet">
+              <label class="form-check-label">
+                Meet New People
+              </label>
+            </div>
+          </div>
+        </div>
+        <label class="col-sm-2 col-form-label">Check Your Email:</label>
+        <input type="text" value="<%= user.local.email %>" name="name">
+          <button type="submit" class="btn btn-warning btn-lg">Finish!</button>
+      </form>
+      <% } %>
+  </div>
+
+
+</body>
+</html>
