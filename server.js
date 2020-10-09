@@ -9,6 +9,7 @@ const MongoClient = require('mongodb').MongoClient
 var mongoose = require('mongoose');
 var passport = require('passport');
 var flash    = require('connect-flash');
+const multer = require('multer');
 const ObjectId = require('mongodb').ObjectID
 
 var morgan       = require('morgan');
@@ -18,25 +19,21 @@ var session      = require('express-session');
 
 var configDB = require('./config/database.js');
 
+var NewsAPI = require('newsapi');
+var configAPI = require('./config/newsapi.js')
+const fetch = require("node-fetch");
+
 var db
 
 // configuration ===============================================================
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useUnifiedTopology', true);
 mongoose.connect(configDB.url, (err, database) => {
   if (err) return console.log(err)
   db = database
-  require('./app/routes.js')(app, passport, db, ObjectId);
+  require('./app/routes.js')(app, passport, db, multer, ObjectId, NewsAPI, configAPI, fetch);
 }); // connect to our database
 
-//app.listen(port, () => {
-    // MongoClient.connect(configDB.url, { useNewUrlParser: true }, (error, client) => {
-    //     if(error) {
-    //         throw error;
-    //     }
-    //     db = client.db(configDB.dbName);
-    //     console.log("Connected to `" + configDB.dbName + "`!");
-    //     require('./app/routes.js')(app, passport, db);
-    // });
-//});
 
 require('./config/passport')(passport); // pass passport for configuration
 

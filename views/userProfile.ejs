@@ -1,0 +1,37 @@
+<%- include('header'); -%>
+
+<%- include('nav'); -%>
+
+<section class="main bg">
+
+  <%- include('sidebar'); -%>
+<!-- Display feed: mix of profiles, businesses, opportunities, and discussions -->
+<div class="col-md-9">
+  <div class="still card">
+             <h2>USER PROFILE</h2>
+               <div class="card users">
+                 <img class="profileImg"src="../<%= discover[0].imgPath%>">
+                 <div class="card-body">
+                   <h4 class="card-title"><%= discover[0].firstname %> <%= discover[0].lastname %> </h4>
+                   <h5 class="card-text"><%= discover[0].who %></h5>
+
+               <% for(var j=0; j< discover[0].field.length; j++) { %>
+                 <div class="card-links">
+                     <% if (typeof discover[0].field != "string") { %>
+                       <span><a href="../meet/<%=  discover[0].field[j] %> "><%=  discover[0].field[j] %></a> | </span>
+
+                   <% }else{%>
+                       <span><a href="../meet/<%=  discover[0].field %> "><%=  discover[0].field %></a> | </span>
+                       </div>
+                     <% break%>
+
+                   <% }%>
+                 </div>
+               <% }%>
+               <a href="../messages/<%= discover[0].username%>" class="btn btn-info">MESSAGE</a>
+                 </div>
+               </div>
+        </div>
+    </section>
+
+<%- include('footer'); -%>

@@ -1,93 +1,68 @@
-<!doctype html>
-<html>
-<head>
-    <title>DEMODAY: MEET</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+<%- include('header'); -%>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <a class="navbar-brand" href="#">DEMODAY</a>
+<%- include('nav'); -%>
 
-      <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-          <li class="nav-item active">
-            <a class="nav-link" href="/profile">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="/jobs">Jobs<span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="/meet">Meet<span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="/events">Events<span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="/messages">Messages<span class="sr-only">(current)</span></a>
-          </li>
-        </ul>
-        <form class="form-inline">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
-      </div>
-    </nav>
+<section class="main bg">
 
-<div class="container">
-
-
-        <!-- LOCAL INFORMATION -->
-        <div class="col-sm-4">
-            <div class="well">
-                <% if (user.local.email) { %>
-                    <% for(var i=0; i<1; i++) {%>
-                <h3><span class="fa fa-user-circle"></span> Hi <%= profile[i].firstname %> !</h3>
-
-        <!-- wanting to display both user data and profile data -->
-
-                    <p>
-                        <strong>Who You Are</strong>: <%= profile[i].who.toUpperCase() %><br>
-                        <strong>Goals</strong>: <%= profile[i].goals.toUpperCase() %><br>
-                    <% } %>
-                        <strong>Email</strong>: <%= user.local.email %><br>
-
-                    <a href="/unlink/local" class="btn btn-default">Unlink</a>
-                    <a href="/logout" class="btn btn-warning">Logout</a>
-                <% } else { %>
-                    <a href="/connect/local" class="btn btn-primary">Connect Local</a>
-                <% } %>
-
-            </div>
-        </div>
+<%- include('sidebar'); -%>
 <!-- Display feed: mix of profiles, businesses, opportunities, and discussions -->
-          <section class="feed col-sm-8">
-              <h2>MEET OTHER USERS!</h2>
-         <% for(var i=0; i<profile.length; i++) {%>
-              <ul class="posts">
-                <li class="post">
-                  <p><%= profile[i].firstname%>   <%=profile[i].lastname%> </p>
-                  <p><%= profile[i].goals.toUpperCase() %></p>
-                  <img id="postImg" src="">
-                  <iframe id="postVid" src= "" width="200" height="200"></iframe>
-                  <p>ABOUT</p>
-                </li>
-              </ul>
-              <% } %>
-        </section>
+<div class="col-md-9">
+  <div class="still card">
+              <h2>MEET USERS!</h2>
+              <form class="form-group d-flex" action="/search" method="post">
+              <div class="form-group form-inline my-2 my-lg-0">
+              <label for="whoFilter">Type</label>
+              <select class="form-control" name="whoFilter" id="whoFilter">
+                  <option value="Business">Business</option>
+                  <option value="Mentor">Mentor</option>
+                  <option value="Mentee">Mentee</option>
+                </select>
+              </div>
+              <div class="form-group form-inline my-2 my-lg-0">
+              <label for="fieldFilter">Field</label>
+              <select class="form-control" name="fieldFilter" id="fieldFilter">
+                  <option value="STEM">STEM</option>
+                  <option value="Humanities">Humanities</option>
+                  <option value="Arts">The Arts</option>
+                  <option value="Education">Education</option>
+                  <option value="Policy">Policy</option>
+                </select>
+              </div>
+              <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            </form>
+
+
+            <% for(var i=0; i< discover.length; i++) { %>
+              <div class="card users">
+                <img class="profileImg"src="../<%= discover[i].imgPath%>">
+                <div class="card-body">
+                  <h4 class="card-title"><%= discover[i].firstname %> <%= discover[i].lastname %> </h4>
+                  <h5 class="card-text"><%= discover[i].who %></h5>
+
+              <% for(var j=0; j< discover[i].field.length; j++) { %>
+                <div class="card-links">
+                    <% if (typeof discover[i].field != "string") { %>
+                      <span><a href="../meet/<%=  discover[i].field[j] %> "><%=  discover[i].field[j] %></a> | </span>
+
+                  <% }else{%>
+                      <span><a href="../meet/<%=  discover[i].field %> "><%=  discover[i].field %></a> | </span>
+                      </div>
+                    <% break%>
+
+                  <% }%>
+                </div>
+              <% }%>
+              <a href="../profile/<%= discover[i].username%>" class="btn btn-info">CONNECT</a>
+                </div>
+              </div>
+    <% } %>
+              </div>
+              </section>
 
 
 
 
-<script src="main.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-</body>
-</html>
+
+
+
+<%- include('footer'); -%>

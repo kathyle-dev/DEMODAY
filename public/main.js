@@ -1,8 +1,8 @@
-var arrow = document.getElementsByClassName("arrow");
+var send= document.getElementById("send-btn");
 var trash = document.getElementsByClassName("fa-trash");
 
-Array.from(arrow).forEach(function(element) {
-      element.addEventListener('click', function(e){
+
+send.addEventListener('click', function(e){
         const name = this.parentNode.parentNode.childNodes[1].innerText
         const src = this.parentNode.parentNode.childNodes[3].getAttribute("src")
         const msg = this.parentNode.parentNode.childNodes[5].innerText

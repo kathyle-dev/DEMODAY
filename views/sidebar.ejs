@@ -1,0 +1,41 @@
+<!-- LOCAL INFORMATION -->
+    <div class="col-md-3">
+        <div class="still card">
+
+        <h3><img class="profileImg" src="../<%= profile[0].imgPath%>"> <br>
+          Hi, <%= profile[0].firstname %>!</h3>
+
+
+    <!-- wanting to display both user data and profile data -->
+    <h5>Who You Are:</h5>
+    <span><%= profile[0].who %></span><br>
+
+    <h5>Goals:</h5>
+    <span> <% for(var i=0; i< profile[0].goals.length; i++) { %>
+      <% if (typeof profile[0].goals != "string") { %>
+      <span><%=  profile[0].goals[i] %> | </span>
+    <% }else{%>
+        <span><%=  profile[0].goals %> | </span>
+      <% break%>
+    <% }%>
+  <% }%>
+    </span><br>
+
+    <h5>Interests:</h5>
+    <span> <% for(var i=0; i< profile[0].field.length; i++) { %>
+      <% if (typeof profile[0].field != "string") { %>
+        <span><a href="/meet/<%=  profile[0].field[i] %> "><%=  profile[0].field[i] %></a> | </span>
+    <% }else{%>
+        <span><a href="/meet/<%=  profile[0].field %> "><%=  profile[0].field %></a> | </span>
+      <% break%>
+        <% }%>
+      <% }%>
+  </span><br>
+
+    <h5>Email:</h5>
+    <span> <%= user.local.email %> </span><br>
+
+        <a href="/unlink/local" class="btn btn-default">Unlink</a>
+        <a href="/logout" class="btn btn-warning">Logout</a>
+        </div>
+    </div>

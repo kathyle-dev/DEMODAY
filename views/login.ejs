@@ -2,15 +2,15 @@
 <html>
 <head>
     <title>DEMO DAY</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://bootswatch.com/4/lux/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-<div class="login container">
-<div class="col-sm-6 col-sm-offset-3">
+<body class="bg">
+<div class="container">
+<div class="login card">
 
-    <h1><span class="fa fa-sign-in"></span> Login</h1>
+    <h2><span class="fa fa-sign-in"></span> Login</h2>
 
     <% if (message.length > 0) { %>
         <div class="alert alert-danger"><%= message %></div>
@@ -27,13 +27,13 @@
             <input type="password" class="form-control" name="password">
         </div>
 
-        <button type="submit" class="btn btn-warning btn-lg">Login</button>
+        <button type="submit" class="btn btn-primary btn-default btn-block">Login</button>
     </form>
 
     <hr>
 
-    <p>Need an account? <a href="/signup">Sign Up</a></p>
-    <p>Or go <a href="/">home</a>.</p>
+    <p>Need an account? <a class="text-danger" href="/signup">Sign Up</a></p>
+    <p>Or go <a class="text-warning" href="/">Home</a>.</p>
 
 
 </div>

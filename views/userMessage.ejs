@@ -1,0 +1,33 @@
+<%- include('header'); -%>
+
+<%- include('nav'); -%>
+
+<section class="main bg">
+
+  <%- include('sidebar'); -%>
+<!-- Display feed: mix of profiles, businesses, opportunities, and discussions -->
+<div class="col-md-9">
+  <div class="still card">
+             <a href="/profile/<%=otherUser[0].username%>" >
+               <img class="profileImg"src="../<%= otherUser[0].imgPath%>">
+              <h2><%= otherUser[0].firstname %> <%= otherUser[0].lastname %></h2>
+             </a>
+
+
+
+      <h2>Send a Message</h2>
+      <!-- POST A MESSAGE -->
+      <form action="/messages/<%=otherUser[0].username%>" method="put">
+        <input type="text" name="msg" value="">
+        <button id="send-btn"type="submit"> Send </button>
+      </form>
+
+
+
+               </div>
+        </div>
+
+
+    </section>
+
+<%- include('footer'); -%>

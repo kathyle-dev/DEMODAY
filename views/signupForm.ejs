@@ -2,95 +2,103 @@
 <html>
 <head>
     <title>DEMO DAY</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://bootswatch.com/4/lux/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-<div class="signUp container">
-
-      <h1><span class="fa fa-sign-in"></span>About You</h1>
-
+<body class="bg">
+<div class="container">
+<div class="form card">
+<h2><span class="fa fa-sign-in"></span> About You</h2>
       <% if (message.length > 0) { %>
           <div class="alert alert-danger"><%= message %></div>
       <% } %>
 
       <!-- SIGN UP FORM -->
     <% if (user.local.email) { %>
-      <form action="/signupForm" method="post">
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">First Name</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" name="firstname">
-          </div>
-        </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">Last Name</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" name="lastname">
-          </div>
-        </div>
-        <fieldset class="form-group">
-          <div class="row">
-            <label class="col-form-label col-sm-2 pt-0">Who You Are</label>
-            <div class="col-sm-10">
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="who" value="business" checked>
-                <label class="form-check-label" for="gridRadios1">
-                  Business
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="who" value="mentor">
-                <label class="form-check-label" for="gridRadios2">
-                  Mentor
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="who" value="mentee">
-                <label class="form-check-label" for="gridRadios3">
-                  Mentee
-                </label>
-              </div>
-            </div>
-          </div>
-        </fieldset>
-        <div class="form-group row">
-          <label class="col-form-label col-sm-2 pt-0">Key Goals?</label>
-          <div class="col-sm-10">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="goals" value="job">
-              <label class="form-check-label">
-                Find a Job
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="goals" value="talent">
-              <label class="form-check-label">
-                Find talent
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="goals" value="collaborate">
-              <label class="form-check-label">
-                Collaborate with Businesses
-              </label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="goals" value="meet">
-              <label class="form-check-label">
-                Meet New People
-              </label>
-            </div>
-          </div>
-        </div>
-        <label class="col-sm-2 col-form-label">Check Your Email:</label>
-        <input type="text" value="<%= user.local.email %>" name="name">
-          <button type="submit" class="btn btn-warning btn-lg">Finish!</button>
+<form action="/signupForm" enctype="multipart/form-data" method="post">
+    <fieldset>
+      <legend>General Information</legend>
+      <div class="form-group row">
+        <label for="firstname">First Name</label>
+        <input type="text" class="form-control" name="firstname" placeholder="First Name">
+      </div>
+      <div class="form-group row">
+        <label for="lastname">Last Name</label>
+        <input type="text" class="form-control" name="lastname" placeholder="Last Name">
+      </div>
+      <div class="form-group row">
+        <label for="bizname">Business Name</label>
+        <input type="text" class="form-control" name="bizname" placeholder="Business Name">
+      </div>
+      <div class="form-group row d-flex flex-column">
+      <label for="file-to-upload">Profile Picture</label>
+       <input type="file" name="file-to-upload">
+      </div>
+
+  <legend>Who You Are</legend>
+<div class="form-group form-group-lg">
+  <div class="custom-control custom-radio">
+    <input type="radio" name="who" id="customRadio1"class="custom-control-input" checked="" value="Business">
+    <label class="custom-control-label" for="customRadio1">Business</label>
+  </div>
+  <div class="custom-control custom-radio">
+    <input type="radio" name="who" id="customRadio2"class="custom-control-input" value="Mentor">
+    <label class="custom-control-label" for="customRadio2">Mentor</label>
+  </div>
+  <div class="custom-control custom-radio">
+    <input type="radio" name="who" id="customRadio3"class="custom-control-input" value="Mentee">
+    <label class="custom-control-label" for="customRadio3">Mentee / Student</label>
+  </div>
+</div>
+<legend>What You're About</legend>
+<div class="form-group">
+<div class="custom-control custom-checkbox">
+  <input type="checkbox" class="custom-control-input" id="customCheck1" name="field" checked="" value="STEM">
+  <label class="custom-control-label" for="customCheck1">STEM</label>
+</div>
+<div class="custom-control custom-checkbox">
+  <input type="checkbox" class="custom-control-input" id="customCheck2" name="field" value="Humanities">
+  <label class="custom-control-label" for="customCheck2">Humanities</label>
+</div>
+<div class="custom-control custom-checkbox">
+  <input type="checkbox" class="custom-control-input" id="customCheck3" name="field" value="Arts">
+  <label class="custom-control-label" for="customCheck3">The Arts</label>
+</div>
+<div class="custom-control custom-checkbox">
+  <input type="checkbox" class="custom-control-input" id="customCheck4" name="field" value="Education">
+  <label class="custom-control-label" for="customCheck4">Education</label>
+</div>
+<div class="custom-control custom-checkbox">
+  <input type="checkbox" class="custom-control-input" id="customCheck5" name="field" value="Policy">
+  <label class="custom-control-label" for="customCheck4">Policy</label>
+</div>
+</div>
+  <legend>Key Goals</legend>
+  <div class="form-group">
+  <div class="custom-control custom-checkbox">
+    <input type="checkbox" class="custom-control-input" id="customCheck6" name="goals" checked="" value="Opportunities">
+    <label class="custom-control-label" for="customCheck6">Find an Opportunity</label>
+  </div>
+  <div class="custom-control custom-checkbox">
+    <input type="checkbox" class="custom-control-input" id="customCheck7" name="goals" value="Talent">
+    <label class="custom-control-label" for="customCheck7">Find Talent</label>
+  </div>
+  <div class="custom-control custom-checkbox">
+    <input type="checkbox" class="custom-control-input" id="customCheck8" name="goals" value="Collaborate">
+    <label class="custom-control-label" for="customCheck8">Collaborate/ Find a Partnership</label>
+  </div>
+  <div class="custom-control custom-checkbox">
+    <input type="checkbox" class="custom-control-input" id="customCheck9" name="goals" value="Meet">
+    <label class="custom-control-label" for="customCheck9">Meet New People</label>
+  </div>
+</div>
+  <button type="submit" class="btn btn-warning btn-default btn-block" value="Upload" >Finish</button>
       </form>
       <% } %>
   </div>
 
+  </div>
 
 </body>
 </html>
