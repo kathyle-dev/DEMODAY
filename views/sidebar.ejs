@@ -2,8 +2,8 @@
     <div class="col-md-3">
         <div class="still card">
 
-        <h3><img class="profileImg" src="../<%= profile[0].imgPath%>"> <br>
-          Hi, <%= profile[0].firstname %>!</h3>
+        <a href="../profile/<%= user.local.email%>"><h3><img class="profileImg" src="../<%= profile[0].imgPath%>"> <br>
+          Hi, <%= profile[0].firstname %>!</h3></a>
 
 
     <!-- wanting to display both user data and profile data -->
@@ -34,7 +34,6 @@
 
     <h5>Email:</h5>
     <span> <%= user.local.email %> </span><br>
-
         <a href="/unlink/local" class="btn btn-default">Unlink</a>
         <a href="/logout" class="btn btn-warning">Logout</a>
         </div>

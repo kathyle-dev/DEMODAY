@@ -38,7 +38,8 @@ var upload = multer({storage: storage});
           field: req.body.field,
           goals: req.body.goals,
           username: req.user.local.email,
-          userId: uId
+          userId: uId,
+          connections: ""
         }, (err, result) => {
         if (err) return console.log(err)
         console.log('saved to database')
@@ -290,24 +291,12 @@ var upload = multer({storage: storage});
         res.redirect('/');
     });
 
-// profile routes ===============================================================
-
-    app.post('/profile', (req, res) => {
-      db.collection('profile').save({name: req.body.name, src: req.body.src, msg: req.body.msg, value: 0, arrowUp:"", arrowDown: ""}, (err, result) => {
-        if (err) return console.log(err)
-        console.log('saved to database')
-        res.redirect('/profile')
-      })
-    })
-
-    app.put('/profile', (req, res) => {
-      if(req.body.arrowUp == "yes"){
+//  connect with a user ========================================================
+    app.put('/connect', (req, res) => {
         db.collection('profile')
-        .findOneAndUpdate({name: req.body.name, src: req.body.src, msg: req.body.msg}, {
+        .findOneAndUpdate({username:req.user.local.email}, {
           $set: {
-            value:req.body.value + 1,
-            arrowUp: req.body.arrowUp,
-            arrowDown: req.body.arrowDown
+            connections:req.body.user
           }
         }, {
           sort: {_id: -1},
@@ -316,22 +305,6 @@ var upload = multer({storage: storage});
           if (err) return res.send(err)
           res.send(result)
         })
-    } else if((req.body.arrowDown == "yes") && (req.body.value!=0)){
-        db.collection('profile')
-        .findOneAndUpdate({name: req.body.name, src: req.body.src, msg: req.body.msg}, {
-        $set: {
-            value:req.body.value -1,
-            arrowUp: req.body.arrowUp,
-            arrowDown: req.body.arrowDown
-        }
-      }, {
-        sort: {_id: -1},
-        upsert: true
-      }, (err, result) => {
-        if (err) return res.send(err)
-        res.send(result)
-        })
-      }
     })
 
     app.delete('/profile', (req, res) => {

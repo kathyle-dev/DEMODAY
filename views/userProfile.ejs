@@ -5,10 +5,17 @@
 <section class="main bg">
 
   <%- include('sidebar'); -%>
-<!-- Display feed: mix of profiles, businesses, opportunities, and discussions -->
+<!-- User's Profile Page: personal information and connections made -->
 <div class="col-md-9">
   <div class="still card">
+      <% if (user.local.email == discover[0].username){%>
+
+    <% }%>
+        <% if (user.local.email == discover[0].username){%>
+          <h2>YOUR PROFILE</h2>
+      <%  }else{%>
              <h2>USER PROFILE</h2>
+          <% }%>
                <div class="card users">
                  <img class="profileImg"src="../<%= discover[0].imgPath%>">
                  <div class="card-body">
@@ -28,8 +35,49 @@
                    <% }%>
                  </div>
                <% }%>
+                 <% if (user.local.email != discover[0].username){%>
                <a href="../messages/<%= discover[0].username%>" class="btn btn-info">MESSAGE</a>
+                 <% }%>
                  </div>
+    <!-- Display user's connections -->
+    <% if (discover[0].connections.length>0){%>
+    <% for(var k=0; k< discover[0].connections; k++) { %>
+                 <div class="card-deck card odd">
+                    <h2><%= discover[0].firstname %>'s Connections!</h2>
+                    <div class="row">
+                      <% for(var i=0; i< discover.length; i++) { %>
+                        <div class="card users">
+                          <img class="profileImg"src="../<%= discover[i].imgPath%>">
+                          <div class="card-body">
+                            <h4 class="card-title"><%= discover[i].firstname %> <%= discover[i].lastname %> </h4>
+                            <h5 class="card-text"><%= discover[i].who %></h5>
+
+                        <% for(var j=0; j< discover[i].field.length; j++) { %>
+                          <div class="card-links">
+                              <% if (typeof discover[i].field != "string") { %>
+                                <span><a href="../meet/<%=  discover[i].field[j] %> "><%=  discover[i].field[j] %></a> | </span>
+
+                            <% }else{%>
+                                <span><a href="../meet/<%=  discover[i].field %> "><%=  discover[i].field %></a> | </span>
+                                </div>
+                              <% break%>
+
+                            <% }%>
+
+                          </div>
+                        <% }%>
+                        <a href="../profile/<%= discover[i].username%>" class="connect btn btn-info" >CONNECT</a>
+                          </div>
+
+                        </div>
+              <% } %>
+                   </div>
+       <% }%>
+  <% }%>
+
+
+
+
                </div>
         </div>
     </section>
