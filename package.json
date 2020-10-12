@@ -2,10 +2,10 @@
   "name": "node-authentication",
   "main": "server.js",
   "scripts": {
-   "start": "node server.js"
- },
+    "start": "node server.js"
+  },
   "dependencies": {
-    "bcrypt-nodejs": "~0.03",
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
     "bootstrap": "^3.4.1",
     "connect-flash": "~0.1.1",
