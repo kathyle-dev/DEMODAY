@@ -8,9 +8,8 @@
 <!-- User's Profile Page: personal information and connections made -->
 <div class="col-md-9">
   <div class="still card">
-      <% if (user.local.email == discover[0].username){%>
 
-    <% }%>
+    <div class="card-deck card odd">
         <% if (user.local.email == discover[0].username){%>
           <h2>YOUR PROFILE</h2>
       <%  }else{%>
@@ -35,50 +34,64 @@
                    <% }%>
                  </div>
                <% }%>
-                 <% if (user.local.email != discover[0].username){%>
-               <a href="../messages/<%= discover[0].username%>" class="btn btn-info">MESSAGE</a>
-                 <% }%>
+
+              <%function checkStatus(){%>
+                <% if (user.local.email != discover[0].username){%>
+                  <% for(var z = 0; z< profile[0].sentRequests.length; z++){%>
+                      <%  if(profile[0].sentRequests[z]==discover[0].username){%>
+                          <% return "pending"%>
+                        <% }%>
+                  <% } %>
+                <%  return "connect"%>
+            <%  } %>
+        <%  } %>
+
+        <%if(checkStatus() == "pending"){%>
+                  <button class="disabled btn btn-info">PENDING</button>
+            <%}else if ((checkStatus() == "connect") && (user.local.email != discover[0].username) && (profile[0].connections != discover[0].username)){%>
+                    <button class="connect-btn btn btn-info">CONNECT</button>
+            <%}%>
                  </div>
+ </div>
+  </div>
     <!-- Display user's connections -->
-    <% if (discover[0].connections.length>0){%>
-    <% for(var k=0; k< discover[0].connections; k++) { %>
-                 <div class="card-deck card odd">
+    <% console.log(connections, "CONNECTIONS", discover[0], "OTHER USR",discover[0], "MY PROF" )%>
+    <% if (connections.length>0){%>
+                <div class="card-deck card even">
+
                     <h2><%= discover[0].firstname %>'s Connections!</h2>
-                    <div class="row">
-                      <% for(var i=0; i< discover.length; i++) { %>
+                    <% for(var k=0; k< connections.length; k++) { %>
                         <div class="card users">
-                          <img class="profileImg"src="../<%= discover[i].imgPath%>">
+                          <img class="profileImg"src="../<%= connections[k].imgPath%>">
                           <div class="card-body">
-                            <h4 class="card-title"><%= discover[i].firstname %> <%= discover[i].lastname %> </h4>
-                            <h5 class="card-text"><%= discover[i].who %></h5>
-
-                        <% for(var j=0; j< discover[i].field.length; j++) { %>
+                            <a href="../profile/<%=connections[k].username%>"<h3 class="card-title"><%= connections[k].firstname %> <%= connections[k].lastname %> </h3></a>
+                            <h5 class="card-text"><%= connections[k].who %></h5>
+                        <% for(var j=0; j< connections[k].field.length; j++) { %>
                           <div class="card-links">
-                              <% if (typeof discover[i].field != "string") { %>
-                                <span><a href="../meet/<%=  discover[i].field[j] %> "><%=  discover[i].field[j] %></a> | </span>
-
+                              <% if (typeof connections[k].field != "string") { %>
+                                <span><a href="../meet/<%=  connections[k].field[j] %> "><%=  connections[k].field[j] %></a> | </span>
                             <% }else{%>
-                                <span><a href="../meet/<%=  discover[i].field %> "><%=  discover[i].field %></a> | </span>
+                                <span><a href="../meet/<%=  connections[k].field %> "><%=  connections[k].field %></a> | </span>
                                 </div>
                               <% break%>
-
                             <% }%>
-
                           </div>
                         <% }%>
-                        <a href="../profile/<%= discover[i].username%>" class="connect btn btn-info" >CONNECT</a>
+                      <%if ((user.local.email != connections[k].username)&&(profile[0].connections != connections[k].username)){%>
                           </div>
+                        <a href="../profile/<%=connections[k].username%>" class="connect btn btn-info" >CONNECT</a>
 
-                        </div>
+                        <% }%>
+                          </div>
               <% } %>
-                   </div>
+
        <% }%>
-  <% }%>
 
 
 
 
-               </div>
+
+
         </div>
     </section>
 

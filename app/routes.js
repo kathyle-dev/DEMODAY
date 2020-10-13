@@ -39,7 +39,9 @@ var upload = multer({storage: storage});
           goals: req.body.goals,
           username: req.user.local.email,
           userId: uId,
-          connections: ""
+          connections: [],
+          sentRequests: [],
+          receivedRequests: []
         }, (err, result) => {
         if (err) return console.log(err)
         console.log('saved to database')
@@ -117,6 +119,7 @@ var upload = multer({storage: storage});
     //--------GET INDIVIDUAL USER PROFILE --------------------
     app.get('/profile/:username', function(req, res) {
         let username= req.params.username
+        // getting logged-in user's information
         db.collection('profile').find().toArray((err, result) => {
             if (err) return console.log(err)
             const userFilter = result.filter(function(result) {
@@ -124,16 +127,23 @@ var upload = multer({storage: storage});
                     return true
                 }
             })
-        db.collection('profile').find({username: username}).toArray((err, userRes) => {
-            if (err) return console.log(err)
+            // getting other User's information
+        db.collection('profile').find({username: username}).toArray((err, otherUser) => {
+                if (err) return console.log(err)
+            // getting other user's connections information
+            const connectionUsers = result.filter(each =>
+                 otherUser[0].connections.includes(each.username))
+
         res.render('userProfile.ejs', {
             user : req.user,
             profile: userFilter,
-            discover: userRes
+            discover: otherUser,
+            connections: connectionUsers
             })
         })
     })
-});
+})
+
     // JOBS / OPPORTUNITIES ------------------------------------
     app.get('/jobs', function(req, res) {
     db.collection('profile').find().toArray((err, result) => {
@@ -208,22 +218,130 @@ var upload = multer({storage: storage});
         })
     });
 
-    // FIND EVENTS ------------------------------------
-    app.get('/events', function(req, res) {
+    //  connection routes ========================================================
+
+    //go to connections tab that has list of pending connection requests
+    app.get('/connections', function(req, res) {
         db.collection('profile').find().toArray((err, result) => {
              if (err) return console.log(err)
+
              const userFilter = result.filter(function(result) {
                  if(req.user.local.email == result.username){
                      return true
                  }
              })
-            res.render('events.ejs', {
+             const connectionFilter = result.filter(each => userFilter[0].receivedRequests.includes(each.username))
+
+            res.render('connections.ejs', {
                 user : req.user,
                 profile: userFilter,
-                discover: result
+                receivedRequests: userFilter[0].receivedRequests,
+                discover: connectionFilter
                 })
             })
         });
+
+    //sending connection requests
+        app.put('/connect', (req, res) => {
+
+            //update SENDER PROFILE
+            db.collection('profile')
+            .findOneAndUpdate({username:req.user.local.email}, {
+              $push: {
+                sentRequests:req.body.username
+                }
+            }, {
+            sort: {_id: 1},
+             upsert: false
+            }, (err, result) => {
+              if (err) return res.send(err)
+              //update RECEIVER PROFILE
+              db.collection('profile')
+              .findOneAndUpdate({username:req.body.username}, {
+                $push: {
+                  receivedRequests:req.user.local.email
+              }
+              }, {
+              sort: {_id: 1},
+               upsert: false
+              }, (err, result) => {
+                if (err) return res.send(err)
+                res.send(result)
+              })
+            })
+        })
+
+    //accepting connection requests
+        app.put('/accept', (req, res) => {
+
+            //accept and update RECEIVER PROFILE
+            db.collection('profile')
+            .findOneAndUpdate({username:req.user.local.email}, {
+              $push: {
+                connections:req.body.username
+            },
+            $pull:{
+                receivedRequests:req.body.username
+            }
+            }, {
+            sort: {_id: 1},
+             upsert: false
+            }, (err, result) => {
+              if (err) return res.send(err)
+              //update SENDER PROFILE
+              db.collection('profile')
+              .findOneAndUpdate({username:req.body.username}, {
+                $push: {
+                  connections:req.user.local.email
+              },
+              $pull:{
+                  sentRequests:req.user.local.email
+              }
+              }, {
+              sort: {_id: 1},
+               upsert: false
+              }, (err, result) => {
+                if (err) return res.send(err)
+                res.send(result)
+              })
+            })
+        })
+
+        //declining connection requests
+            app.put('/decline', (req, res) => {
+
+                //accept and update RECEIVER PROFILE
+                db.collection('profile')
+                .findOneAndUpdate({username:req.user.local.email}, {
+                  $push: {
+                    declinedRequests:req.body.username
+                },
+                $pull:{
+                    receivedRequests:req.body.username
+                }
+                }, {
+                sort: {_id: 1},
+                 upsert: false
+                }, (err, result) => {
+                  if (err) return res.send(err)
+                  //update SENDER PROFILE
+                  db.collection('profile')
+                  .findOneAndUpdate({username:req.body.username}, {
+                    $push: {
+                      connections:req.user.local.email
+                  },
+                  $pull:{
+                      sentRequests:req.user.local.email
+                  }
+                  }, {
+                  sort: {_id: 1},
+                   upsert: false
+                  }, (err, result) => {
+                    if (err) return res.send(err)
+                    res.send(result)
+                  })
+                })
+            })
 
     // PRIVATE MESSAGES ------------------------------------
     app.get('/messages', function(req, res) {
@@ -291,21 +409,6 @@ var upload = multer({storage: storage});
         res.redirect('/');
     });
 
-//  connect with a user ========================================================
-    app.put('/connect', (req, res) => {
-        db.collection('profile')
-        .findOneAndUpdate({username:req.user.local.email}, {
-          $set: {
-            connections:req.body.user
-          }
-        }, {
-          sort: {_id: -1},
-          upsert: true
-        }, (err, result) => {
-          if (err) return res.send(err)
-          res.send(result)
-        })
-    })
 
     app.delete('/profile', (req, res) => {
       db.collection('profile').findOneAndDelete({name: req.body.name, msg: req.body.msg}, (err, result) => {

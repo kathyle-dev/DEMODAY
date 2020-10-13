@@ -1,14 +1,16 @@
-var connect= document.getElementsByClassName("connect");
-var trash = document.getElementsByClassName("fa-trash");
+var connect= document.querySelectorAll(".connect-btn");
+var accept = document.querySelectorAll(".accept-btn");
+var decline = document.querySelectorAll(".decline-btn");
 
-Array.from(connect).forEach(function(element) {
+connect.forEach(function(element) {
 element.addEventListener('click', function(e){
-        const user = window.location.pathname.subtring(lastIndexOf('/') + 1)
-             fetch('connect', {
+        const index = window.location.pathname.lastIndexOf("/")
+        const email= window.location.pathname.slice(index+1)
+             fetch('/connect', {
               method: 'put',
               headers: {'Content-Type': 'application/json'},
               body: JSON.stringify({
-                 'user': user,
+                 'username': email,
                   })
              })
              .then(response => {
@@ -17,24 +19,46 @@ element.addEventListener('click', function(e){
              .then(data => {
                window.location.reload(true)
              })
+      })
+});
+
+
+accept.forEach(function(element) {
+element.addEventListener('click', function(e){
+        const email= e.target.getAttribute("data-email")
+             fetch('/accept', {
+              method: 'put',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                 'username': email,
+                  })
+             })
+             .then(response => {
+               if (response.ok) return response.json()
+             })
+             .then(data => {
+               window.location.reload(true)
+
+             })
       });
 });
 
-Array.from(trash).forEach(function(element) {
-      element.addEventListener('click', function(){
-        const user = this.parentNode.parentNode.childNodes[1].innerText
-        const msg = this.parentNode.parentNode.childNodes[5].innerText
-        fetch('messages', {
-          method: 'delete',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            'name': name,
-            'msg': msg
-          })
-        }).then(function (response) {
-          window.location.assign("../connection/sent")
-        })
+accept.forEach(function(element) {
+element.addEventListener('click', function(e){
+        const email= e.target.getAttribute("data-email")
+             fetch('/decline', {
+              method: 'put',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                 'username': email,
+                  })
+             })
+             .then(response => {
+               if (response.ok) return response.json()
+             })
+             .then(data => {
+               window.location.reload(true)
+
+             })
       });
 });

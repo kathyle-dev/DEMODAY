@@ -1,0 +1,44 @@
+<%- include('header'); -%>
+
+<%- include('nav'); -%>
+
+<section class="main bg">
+
+        <%- include('sidebar'); -%>
+<!-- Display feed: mix of profiles, businesses, opportunities, and discussions -->
+<div class="col-md-9">
+  <div class="still card">
+             <h2>PENDING CONNECTIONS</h2>
+    <%if (receivedRequests.length == 0){%>
+        <p>You have not received connections!</p>
+      <%}%>
+      <% for(var i=0; i< discover.length; i++) { %>
+        <div class="card users">
+          <img class="profileImg"src="../<%= discover[i].imgPath%>">
+          <div class="card-body">
+            <h4 class="card-title"><%= discover[i].firstname %> <%= discover[i].lastname %> </h4>
+            <h5 class="card-text"><%= discover[i].who %></h5>
+              <div class="card-links">
+              <% for(var j=0; j< discover[i].field.length; j++) { %>
+                    <% if (typeof discover[i].field != "string") { %>
+                      <span><a href="../meet/<%=  discover[i].field[j] %> "><%=  discover[i].field[j] %></a> | </span>
+                  <% }else{%>
+                      <span><a href="../meet/<%=  discover[i].field %> "><%=  discover[i].field %></a> | </span>
+                      </div>
+                    <% break%>
+                  <% }%>
+                </div>
+              <% }%>
+              </div>
+              <button data-email="<%= discover[i].username%>" class="accept-btn btn btn-info">ACCEPT!</button>
+              <button data-email="<%= discover[i].username%>" class="decline-btn btn btn-danger">DECLINE</button>
+              </div>
+              <% } %>
+
+
+
+  </div>
+
+</section>
+
+<%- include('footer'); -%>
