@@ -10,24 +10,24 @@
   <div class="still card">
 
     <div class="card-deck card odd">
-        <% if (user.local.email == discover[0].username){%>
+        <% if (user.local.email == discover.username){%>
           <h2>YOUR PROFILE</h2>
       <%  }else{%>
              <h2>USER PROFILE</h2>
           <% }%>
                <div class="card users">
-                 <img class="profileImg"src="../<%= discover[0].imgPath%>">
+                 <img class="profileImg"src="../<%= discover.imgPath%>">
                  <div class="card-body">
-                   <h4 class="card-title"><%= discover[0].firstname %> <%= discover[0].lastname %> </h4>
-                   <h5 class="card-text"><%= discover[0].who %></h5>
+                   <h4 class="card-title"><%= discover.firstname %> <%= discover.lastname %> </h4>
+                   <h5 class="card-text"><%= discover.who %></h5>
 
-               <% for(var j=0; j< discover[0].field.length; j++) { %>
+               <% for(var j=0; j< discover.field.length; j++) { %>
                  <div class="card-links">
-                     <% if (typeof discover[0].field != "string") { %>
-                       <span><a href="../meet/<%=  discover[0].field[j] %> "><%=  discover[0].field[j] %></a> | </span>
+                     <% if (typeof discover.field != "string") { %>
+                       <span><a href="../meet/<%=  discover.field[j] %> "><%=  discover.field[j] %></a> | </span>
 
                    <% }else{%>
-                       <span><a href="../meet/<%=  discover[0].field %> "><%=  discover[0].field %></a> | </span>
+                       <span><a href="../meet/<%=  discover.field %> "><%=  discover.field %></a> | </span>
                        </div>
                      <% break%>
 
@@ -36,9 +36,9 @@
                <% }%>
 
               <%function checkStatus(){%>
-                <% if (user.local.email != discover[0].username){%>
+                <% if (user.local.email != discover.username){%>
                   <% for(var z = 0; z< profile[0].sentRequests.length; z++){%>
-                      <%  if(profile[0].sentRequests[z]==discover[0].username){%>
+                      <%  if(profile[0].sentRequests[z]==discover.username){%>
                           <% return "pending"%>
                         <% }%>
                   <% } %>
@@ -48,18 +48,18 @@
 
         <%if(checkStatus() == "pending"){%>
                   <button class="disabled btn btn-info">PENDING</button>
-            <%}else if ((checkStatus() == "connect") && (user.local.email != discover[0].username) && (profile[0].connections != discover[0].username)){%>
+            <%}else if ((checkStatus() == "connect") && (user.local.email != discover.username) && (profile[0].connections != discover.username)){%>
                     <button class="connect-btn btn btn-info">CONNECT</button>
             <%}%>
                  </div>
  </div>
   </div>
     <!-- Display user's connections -->
-    <% console.log(connections, "CONNECTIONS", discover[0], "OTHER USR",discover[0], "MY PROF" )%>
+
     <% if (connections.length>0){%>
                 <div class="card-deck card even">
 
-                    <h2><%= discover[0].firstname %>'s Connections!</h2>
+                    <h2><%= discover.firstname %>'s Connections!</h2>
                     <% for(var k=0; k< connections.length; k++) { %>
                         <div class="card users">
                           <img class="profileImg"src="../<%= connections[k].imgPath%>">
@@ -77,7 +77,7 @@
                             <% }%>
                           </div>
                         <% }%>
-                      <%if ((user.local.email != connections[k].username)&&(profile[0].connections != connections[k].username)){%>
+                      <%if((user.local.email != connections[k].username) &&(profile[0].connections != connections[k].username)){%>
                           </div>
                         <a href="../profile/<%=connections[k].username%>" class="connect btn btn-info" >CONNECT</a>
 

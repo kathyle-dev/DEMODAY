@@ -11,6 +11,18 @@
              <h2>PENDING CONNECTIONS</h2>
     <%if (receivedRequests.length == 0){%>
         <p>You have not received connections!</p>
+        <%if(sentRequests.length > 0){%>
+          <% for(var i=0; i< sentRequests.length; i++) { %>
+            <div class="card users">
+              <img class="profileImg"src="../<%= sentRequests[i].imgPath%>">
+              <div class="card-body">
+                <a href="../profile/<%= sentRequests[i].username%>"><h4 class="card-title"><%= sentRequests[i].firstname %> <%= sentRequests[i].lastname %> </h4> </a>
+                <h5 class="card-text"><%= sentRequests[i].who %></h5>
+                  <button class="disabled btn btn-info">PENDING</button>
+                  </div>
+                    </div>
+                  <% } %>
+          <%}%>
       <%}%>
       <% for(var i=0; i< discover.length; i++) { %>
         <div class="card users">

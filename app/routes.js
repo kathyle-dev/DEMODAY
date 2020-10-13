@@ -122,26 +122,30 @@ var upload = multer({storage: storage});
         // getting logged-in user's information
         db.collection('profile').find().toArray((err, result) => {
             if (err) return console.log(err)
-            const userFilter = result.filter(function(result) {
+            var userFilter = result.filter(function(result) {
                 if(req.user.local.email == result.username){
                     return true
                 }
             })
             // getting other User's information
-        db.collection('profile').find({username: username}).toArray((err, otherUser) => {
-                if (err) return console.log(err)
-            // getting other user's connections information
-            const connectionUsers = result.filter(each =>
-                 otherUser[0].connections.includes(each.username))
-
-        res.render('userProfile.ejs', {
-            user : req.user,
-            profile: userFilter,
-            discover: otherUser,
-            connections: connectionUsers
+            var otherUser = result.find((e) =>{
+             return e.username.includes(req.params.username)
             })
+            // getting other user's connections information
+            console.log(result, "THIS IS RESULTS", req.params.username, "OTHER USER-PARAMS")
+             const connectionUsers = result.filter((e) =>{
+                        return otherUser.connections.includes(e.username)
+            })
+
+                          res.render('userProfile.ejs', {
+                              user : req.user,
+                              profile: userFilter,
+                              discover: otherUser,
+                              connections: connectionUsers
+                              })
+
         })
-    })
+
 })
 
     // JOBS / OPPORTUNITIES ------------------------------------
@@ -224,20 +228,25 @@ var upload = multer({storage: storage});
     app.get('/connections', function(req, res) {
         db.collection('profile').find().toArray((err, result) => {
              if (err) return console.log(err)
-
-             const userFilter = result.filter(function(result) {
+             var userFilter = result.filter(function(result) {
                  if(req.user.local.email == result.username){
                      return true
                  }
              })
-             const connectionFilter = result.filter(each => userFilter[0].receivedRequests.includes(each.username))
+            const receivedUsers = result.filter((e) =>{
+            return userFilter[0].receivedRequests.includes(e.username)})
 
-            res.render('connections.ejs', {
-                user : req.user,
-                profile: userFilter,
-                receivedRequests: userFilter[0].receivedRequests,
-                discover: connectionFilter
-                })
+            const sentUsers = result.filter((e) =>{
+            return userFilter[0].sentRequests.includes(e.username)})
+
+                res.render('connections.ejs', {
+                    user : req.user,
+                    profile: userFilter,
+                    sentRequests: sentUsers,
+                    receivedRequests: userFilter[0].receivedRequests,
+                    discover: receivedUsers
+                    })
+
             })
         });
 
@@ -264,8 +273,9 @@ var upload = multer({storage: storage});
               }, {
               sort: {_id: 1},
                upsert: false
-              }, (err, result) => {
+           }, (err, result) => {
                 if (err) return res.send(err)
+                console.log(result)
                 res.send(result)
               })
             })
@@ -347,19 +357,24 @@ var upload = multer({storage: storage});
     app.get('/messages', function(req, res) {
         db.collection('profile').find().toArray((err, result) => {
              if (err) return console.log(err)
-             const userFilter = result.filter(function(result) {
-                 if(req.user.local.email == result.username){
-                     return true
-                 }
+             var userFilter = result.filter((e) => {
+                 return e.username.includes(req.user.local.email)
              })
-            res.render('messages.ejs', {
-                user : req.user,
-                profile: userFilter,
-                discover: result
-                })
+             setTimeout(()=>{
+                 const connectionUsers = result.filter((e) =>{
+                      return userFilter[0].connections.includes(e.username)})
+                        res.render('messages.ejs', {
+                            user : req.user,
+                            profile: userFilter,
+                            receivedMessages: userFilter[0].receivedMessages,
+                            connections: connectionUsers
+                            })
+             },500)
+
             })
-        });
-        // ----------INDIVIDUAL PRIVATE MESSAGE -------------------------------
+
+    });
+        // ----------GO TO INDIVIDUAL PRIVATE MESSAGE ---------------------
         app.get('/messages/:username', function(req, res) {
             let username = req.params.username
             db.collection('profile').find().toArray((err, result) => {
@@ -382,7 +397,7 @@ var upload = multer({storage: storage});
                 })
         })
     });
-    // ----------POST INDIVIDUAL PRIVATE MESSAGE -------------------------------
+    // ----------POST INDIVIDUAL PRIVATE MESSAGE ----------------------------
     app.put('/messages/:username', function(req, res) {
         let currentU = req.user.local.email
         let receiverE = req.params.username
