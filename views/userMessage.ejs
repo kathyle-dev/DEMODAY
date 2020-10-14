@@ -13,16 +13,24 @@
               <h2><%= otherUser[0].firstname %> <%= otherUser[0].lastname %></h2>
              </a>
 
+        <!-- YOUR MESSAGES -->
+             <div class="col-sm-6">
+                <h3>Messages</h3>
+                <ul class="messages">
+                <% for(var i=0; i<messages.length; i++) {%>
+                  <p>
+                 <span><%=messages[i].sender %></span>
+                 <span><%= messages[i].msg %></span>
+                 </p>
+                <% } %>
+               </ul>
 
-
-      <h2>Send a Message</h2>
       <!-- POST A MESSAGE -->
-      <form action="/messages/<%=otherUser[0].username%>" method="put">
-        <input type="text" name="msg" value="">
-        <button id="send-btn"type="submit"> Send </button>
-      </form>
-
-
+      <h3>Send a Message</h3>
+      <form action="/messages" method="post">
+            <input id="otherUser" type="text" name="comment" >
+            <button id="msg-btn"  data-email="<%= otherUser[0].username %>" type="submit" name="button">Send</button>
+          </form>
 
                </div>
         </div>

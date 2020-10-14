@@ -2,6 +2,11 @@ var connect= document.querySelectorAll(".connect-btn");
 var accept = document.querySelectorAll(".accept-btn");
 var decline = document.querySelectorAll(".decline-btn");
 
+
+var sendMsg = document.getElementById('msg-btn')
+
+
+// SEND CONNECTION REQUEST //
 connect.forEach(function(element) {
 element.addEventListener('click', function(e){
         const index = window.location.pathname.lastIndexOf("/")
@@ -22,7 +27,7 @@ element.addEventListener('click', function(e){
       })
 });
 
-
+// ACCEPT CONNECTION REQUEST //
 accept.forEach(function(element) {
 element.addEventListener('click', function(e){
         const email= e.target.getAttribute("data-email")
@@ -42,8 +47,8 @@ element.addEventListener('click', function(e){
              })
       });
 });
-
-accept.forEach(function(element) {
+// DECLINE CONNECTION REQUEST //
+decline.forEach(function(element) {
 element.addEventListener('click', function(e){
         const email= e.target.getAttribute("data-email")
              fetch('/decline', {
@@ -62,3 +67,28 @@ element.addEventListener('click', function(e){
              })
       });
 });
+
+//SEND MESSAGE TO USER //
+
+sendMsg.addEventListener('click', function(e){
+e.preventDefault()
+let otherUser = document.getElementById('otherUser')
+let msg = otherUser.value
+let otherUserEmail = e.target.getAttribute("data-email")
+fetch('/messages',{
+    method: 'post',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      messages:
+      {receiver: otherUserEmail,
+        msg: msg
+      }
+    }) })
+    .then(response =>
+          {if (response.ok)
+                return response.json()})
+    .then(data =>{
+      console.log(data)
+        window.location.reload(true)
+    })
+})

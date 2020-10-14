@@ -18,27 +18,31 @@
                <div class="card users">
                  <img class="profileImg"src="../<%= discover.imgPath%>">
                  <div class="card-body">
-                   <h4 class="card-title"><%= discover.firstname %> <%= discover.lastname %> </h4>
+                  <a href="../profile/<%= discover.username%>"> <h4 class="card-title"><%= discover.firstname %> <%= discover.lastname %> </h4> </a>
                    <h5 class="card-text"><%= discover.who %></h5>
 
-               <% for(var j=0; j< discover.field.length; j++) { %>
-                 <div class="card-links">
+               <% for(var j=0; j< discover.field.length; j++){ %>
+                  <div class="card-links">
                      <% if (typeof discover.field != "string") { %>
                        <span><a href="../meet/<%=  discover.field[j] %> "><%=  discover.field[j] %></a> | </span>
 
-                   <% }else{%>
-                       <span><a href="../meet/<%=  discover.field %> "><%=  discover.field %></a> | </span>
+                   <%}else{%>
+                       <span><a href="../meet/<%=  discover.field %> "><%=  discover.field %></a> </span>
                        </div>
                      <% break%>
-
                    <% }%>
                  </div>
                <% }%>
 
+
+
+
               <%function checkStatus(){%>
-                <% if (user.local.email != discover.username){%>
+                <% if ((user.local.email != discover.username)){%>
                   <% for(var z = 0; z< profile[0].sentRequests.length; z++){%>
-                      <%  if(profile[0].sentRequests[z]==discover.username){%>
+                      <%  if((profile[0].sentRequests[z]== discover.username)||
+                            (connections.includes(profile[0].sentRequests[z]) == true)
+                            ){%>
                           <% return "pending"%>
                         <% }%>
                   <% } %>
@@ -48,7 +52,7 @@
 
         <%if(checkStatus() == "pending"){%>
                   <button class="disabled btn btn-info">PENDING</button>
-            <%}else if ((checkStatus() == "connect") && (user.local.email != discover.username) && (profile[0].connections != discover.username)){%>
+            <%}else if ((checkStatus() == "connect") ){%>
                     <button class="connect-btn btn btn-info">CONNECT</button>
             <%}%>
                  </div>
@@ -71,18 +75,24 @@
                               <% if (typeof connections[k].field != "string") { %>
                                 <span><a href="../meet/<%=  connections[k].field[j] %> "><%=  connections[k].field[j] %></a> | </span>
                             <% }else{%>
-                                <span><a href="../meet/<%=  connections[k].field %> "><%=  connections[k].field %></a> | </span>
+                                <span><a href="../meet/<%=  connections[k].field %> "><%=  connections[k].field %></a> </span>
                                 </div>
                               <% break%>
                             <% }%>
                           </div>
                         <% }%>
-                      <%if((user.local.email != connections[k].username) &&(profile[0].connections != connections[k].username)){%>
-                          </div>
-                        <a href="../profile/<%=connections[k].username%>" class="connect btn btn-info" >CONNECT</a>
+                        <%if((user.local.email != connections[k].username) ){%>
+                            </div>
+                            <%if(checkStatus() == "pending"){%>
+                                      <button class="disabled btn btn-info">PENDING</button>
+                                <%}else if ((checkStatus() == "connect") && (user.local.email != discover.username)){%>
+                                        <button class="connect-btn btn btn-info">CONNECT</button>
+                                <%}%>
 
-                        <% }%>
-                          </div>
+                          <% }%>
+
+                  </div>
+
               <% } %>
 
        <% }%>

@@ -15,7 +15,7 @@
       <% if (typeof profile[0].goals != "string") { %>
       <span><%=  profile[0].goals[i] %> | </span>
     <% }else{%>
-        <span><%=  profile[0].goals %> | </span>
+        <span><%=  profile[0].goals %> </span>
       <% break%>
     <% }%>
   <% }%>
@@ -26,7 +26,7 @@
       <% if (typeof profile[0].field != "string") { %>
         <span><a href="/meet/<%=  profile[0].field[i] %> "><%=  profile[0].field[i] %></a> | </span>
     <% }else{%>
-        <span><a href="/meet/<%=  profile[0].field %> "><%=  profile[0].field %></a> | </span>
+        <span><a href="/meet/<%=  profile[0].field %> "><%=  profile[0].field %></a> </span>
       <% break%>
         <% }%>
       <% }%>

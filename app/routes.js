@@ -127,21 +127,31 @@ var upload = multer({storage: storage});
                     return true
                 }
             })
+        //getting logged in user's connections user list
+            var userConnections = result.filter((e) =>{
+                       return userFilter[0].connections.includes(e.username)
+           })
             // getting other User's information
-            var otherUser = result.find((e) =>{
+            var otherUser = result.filter((e) =>{
              return e.username.includes(req.params.username)
             })
+
             // getting other user's connections information
-            console.log(result, "THIS IS RESULTS", req.params.username, "OTHER USER-PARAMS")
-             const connectionUsers = result.filter((e) =>{
-                        return otherUser.connections.includes(e.username)
+             var otherConnectionUsers = result.filter((e) =>{
+                        return otherUser[0].connections.includes(e.username)
             })
 
+            var found = userConnections.some(r=> otherConnectionUsers.includes(r))
+            found = found >0
+
+            console.log(found, "THIS IS FOUND")
                           res.render('userProfile.ejs', {
                               user : req.user,
                               profile: userFilter,
-                              discover: otherUser,
-                              connections: connectionUsers
+                              myConnections: userConnections,
+                              discover: otherUser[0],
+                              connections: otherConnectionUsers
+
                               })
 
         })
@@ -360,62 +370,74 @@ var upload = multer({storage: storage});
              var userFilter = result.filter((e) => {
                  return e.username.includes(req.user.local.email)
              })
-             setTimeout(()=>{
-                 const connectionUsers = result.filter((e) =>{
-                      return userFilter[0].connections.includes(e.username)})
-                        res.render('messages.ejs', {
-                            user : req.user,
-                            profile: userFilter,
-                            receivedMessages: userFilter[0].receivedMessages,
-                            connections: connectionUsers
-                            })
-             },500)
+            var connectionUsers = result.filter((e) =>{
+              return userFilter[0].connections.includes(e.username)})
+                res.render('messages.ejs', {
+                    user : req.user,
+                    profile: userFilter,
+                    receivedMessages:userFilter[0].receivedMessages,
+                    connections: connectionUsers
+                    })
 
             })
-
     });
         // ----------GO TO INDIVIDUAL PRIVATE MESSAGE ---------------------
         app.get('/messages/:username', function(req, res) {
             let username = req.params.username
-            db.collection('profile').find().toArray((err, result) => {
+            db.collection('profile').find().toArray((err, users) => {
                 if (err) return console.log(err)
-                const userFilter = result.filter(function(result) {
-                    if(req.user.local.email == result.username){
+                const userFilter = users.filter(function(users) {
+                    if(req.user.local.email == users.username){
                         return true
                     }
                 })
-                const otherUser = result.filter(function(result) {
-                    if(username == result.username){
-                        return true
-                    }
+                const otherUser = users.filter((e)=>{
+                    return e.username.includes(req.params.username)
                 })
-                if (err) return console.log(err)
-            res.render('userMessage.ejs', {
-                user:req.user,
-                profile: userFilter,
-                otherUser:otherUser,
+
+                // {$or:[
+                //   {$and: [
+                //     {sender: req.user.local.email},
+                //     {reciever: username}
+                //    ]},
+                //    {$and: [
+                //      {sender: username},
+                //      {reciever: req.user.local.email}
+                //    ]}
+                //  ]}
+                console.log(req.user.local.email, "LOCAL EMAIL", username, "OTHER USER EMAIL")
+            db.collection('messages').find(
+                {
+        $and : [
+            { $or : [ { sender : req.user.local.email }, { sender : username } ] },
+            { $or : [ { receiver : username }, { receiver: req.user.local.email } ] }
+                ]
+                }
+
+                ).toArray((err, result) => {
+                    console.log(result, "THESE ARE MSGS -- PLZ")
+                  if (err) return console.log(err)
+                  res.render('userMessage.ejs', {
+                    user : req.user,
+                    profile: userFilter,
+                    messages: result,
+                    otherUser: otherUser
+                  })
                 })
         })
-    });
-    // ----------POST INDIVIDUAL PRIVATE MESSAGE ----------------------------
-    app.put('/messages/:username', function(req, res) {
-        let currentU = req.user.local.email
-        let receiverE = req.params.username
-        db.collection('profile').findOneAndUpdate({username: receiverE}, {
-          $push: {
-            messages:{
-                senderE:currentU,
-                msg:req.body.msg
-            }
-          }
-        }, {
-          sort: {_id: -1},
-          upsert: true
-        }, (err, result) => {
-          if (err) return res.send(err)
-          res.redirect(`/messages/${req.params.username}`)
-        })
-});
+    })
+    // ----------POST INDIVIDUAL PRIVATE MESSAGE -------------------
+app.post('/messages', function(req, res) {
+    let message = req.body.messages
+    let sender = req.user.local.email
+    message.sender = sender
+db.collection('messages').insertOne( message, (err, result) => {
+  if (err) return console.log(err)
+  let success = {test:"strings"}
+  res.send(success)
+})
+
+})
 
 
     // LOGOUT ==============================
