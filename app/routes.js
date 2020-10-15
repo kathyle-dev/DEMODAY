@@ -1,4 +1,4 @@
-module.exports = function(app, passport, db, multer, ObjectId, NewsAPI, configAPI, fetch) {
+module.exports = function(app, passport, db, multer, ObjectId, NewsAPI, configAPI, fetch, nodemailer) {
 
 // Image Upload Code =========================================================================
 var storage = multer.diskStorage({
@@ -119,6 +119,7 @@ var upload = multer({storage: storage});
     //--------GET INDIVIDUAL USER PROFILE --------------------
     app.get('/profile/:username', function(req, res) {
         let username= req.params.username
+        let status = ""
         // getting logged-in user's information
         db.collection('profile').find().toArray((err, result) => {
             if (err) return console.log(err)
@@ -127,10 +128,7 @@ var upload = multer({storage: storage});
                     return true
                 }
             })
-        //getting logged in user's connections user list
-            var userConnections = result.filter((e) =>{
-                       return userFilter[0].connections.includes(e.username)
-           })
+
             // getting other User's information
             var otherUser = result.filter((e) =>{
              return e.username.includes(req.params.username)
@@ -141,17 +139,20 @@ var upload = multer({storage: storage});
                         return otherUser[0].connections.includes(e.username)
             })
 
-            var found = userConnections.some(r=> otherConnectionUsers.includes(r))
-            found = found >0
 
-            console.log(found, "THIS IS FOUND")
+            if(userFilter[0] == otherUser[0]){
+                status = "true"
+            }else{
+                status = "false"
+            }
+
+        console.log(status, "THIS IS STATUS")
                           res.render('userProfile.ejs', {
                               user : req.user,
                               profile: userFilter,
-                              myConnections: userConnections,
                               discover: otherUser[0],
-                              connections: otherConnectionUsers
-
+                              connections: otherConnectionUsers,
+                              status: status
                               })
 
         })
@@ -293,6 +294,35 @@ var upload = multer({storage: storage});
 
     //accepting connection requests
         app.put('/accept', (req, res) => {
+            //nodemailer = service (NPM package) configuration
+            var transport = nodemailer.createTransport({
+              service: "hotmail",
+              auth: {
+                user: "general.diversify@outlook.com", //where we're sending emails from
+                pass: "diversify180!"
+              }
+            });
+
+          //OBJECT {} -> template/configuration for creating a message
+            const message = {
+                from: 'general.diversify@outlook.com', // Sender address
+                to: req.user.local.email,         // List of recipients
+                subject: `You are now a connection with ${req.body.username}!`, // Subject line
+                text: `Your connection request has been accepted! Go to your Messages to start chatting with ${req.body.username}.`, // Plain text body of the email i.e.
+                // html: `Embedded image: <img src="${req.body.pic}"/>`,
+                // attachments: [{
+                //     filename: 'image.png',
+                //     path: `./public/img/${fileName}`,
+                //     cid: 'unique@nodemailer.com' //same cid value as in the html img src
+                // }]
+            };
+              transport.sendMail(message, function(err, info) { //using transport variable to use sendmail method -> send approved email to client, message is parameter
+                if (err) {
+                  console.log(err)
+                } else {
+                  console.log(info);
+                }
+            });
 
             //accept and update RECEIVER PROFILE
             db.collection('profile')
@@ -439,12 +469,12 @@ db.collection('messages').insertOne( message, (err, result) => {
     });
 
 
-    app.delete('/profile', (req, res) => {
-      db.collection('profile').findOneAndDelete({name: req.body.name, msg: req.body.msg}, (err, result) => {
-        if (err) return res.send(500, err)
-        res.send('Message deleted!')
-      })
-    })
+    // app.delete('/profile', (req, res) => {
+    //   db.collection('profile').findOneAndDelete({name: req.body.name, msg: req.body.msg}, (err, result) => {
+    //     if (err) return res.send(500, err)
+    //     res.send('Message deleted!')
+    //   })
+    // })
 
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================

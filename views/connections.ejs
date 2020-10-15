@@ -34,11 +34,13 @@
               <% } %>
                 </div>
       <%}%>
-
-    <h2>PENDING CONNECTIONS</h2>
-  <%if(sentRequests.length == 0){%>
+    <%console.log(receivedRequests, "RECEIVED REQ", sentRequests, "SENT REQ")%>
+  <%if(receivedRequests.length == 0){%>
+      <h2>NO CONNECTIONS</h2>
         <p>You have not received connections!</p>
-        <%}else if(sentRequests.length > 0){%>
+        <%}
+    if(sentRequests.length > 0){%>
+        <h2>PENDING CONNECTIONS</h2>
           <% for(var i=0; i< sentRequests.length; i++) { %>
             <div class="card users">
               <img class="profileImg"src="../<%= sentRequests[i].imgPath%>">
@@ -53,7 +55,7 @@
 
 
 
-  
+
 
 </section>
 

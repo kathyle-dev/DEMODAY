@@ -34,27 +34,37 @@
                  </div>
                <% }%>
 
+              <%function checkStatus(checkOther){
+                if(checkOther=== user.local.email){
+                  return "empty"
+                }
+                console.log(`CHECKING THE STATUS OF ${checkOther}`)
+                 if (status =="false"){
+                   for(var z = 0; z< profile[0].sentRequests.length; z++){
+                     console.log(`CHECKING AGAINST ${profile[0].sentRequests[z]}`)
+                        if((profile[0].sentRequests[z]== checkOther) == true){
+                           return "pending"
+                         }
+                   }
+                   console.log(`CHECKING  IF ${checkOther} IS ALREADY IN ${profile[0].connections} & NOT ${user.local.email} (ME)`)
 
+                  if(profile[0].connections.find((connection)=>
+                  connection===checkOther)){
+                     return "empty"
+                     }
+                  return "connect"
+              }
+          } %>
 
+        <%console.log(status, "THIS IS THE STATUS")%>
 
-              <%function checkStatus(){%>
-                <% if ((user.local.email != discover.username)){%>
-                  <% for(var z = 0; z< profile[0].sentRequests.length; z++){%>
-                      <%  if((profile[0].sentRequests[z]== discover.username)||
-                            (connections.includes(profile[0].sentRequests[z]) == true)
-                            ){%>
-                          <% return "pending"%>
-                        <% }%>
-                  <% } %>
-                <%  return "connect"%>
-            <%  } %>
-        <%  } %>
-
-        <%if(checkStatus() == "pending"){%>
+        <%if(checkStatus(discover.username) == "pending"){%>
                   <button class="disabled btn btn-info">PENDING</button>
-            <%}else if ((checkStatus() == "connect") ){%>
+            <%}else if ((checkStatus(discover.username) == "connect") ){%>
                     <button class="connect-btn btn btn-info">CONNECT</button>
-            <%}%>
+            <%}else if ((checkStatus(discover.username) == "empty") ){%>
+              <!--THIS IS EMPTY -->
+                <%  } %>
                  </div>
  </div>
   </div>
@@ -70,32 +80,37 @@
                           <div class="card-body">
                             <a href="../profile/<%=connections[k].username%>"<h3 class="card-title"><%= connections[k].firstname %> <%= connections[k].lastname %> </h3></a>
                             <h5 class="card-text"><%= connections[k].who %></h5>
-                        <% for(var j=0; j< connections[k].field.length; j++) { %>
                           <div class="card-links">
+                        <% for(var j=0; j< connections[k].field.length; j++) { %>
                               <% if (typeof connections[k].field != "string") { %>
                                 <span><a href="../meet/<%=  connections[k].field[j] %> "><%=  connections[k].field[j] %></a> | </span>
                             <% }else{%>
                                 <span><a href="../meet/<%=  connections[k].field %> "><%=  connections[k].field %></a> </span>
-                                </div>
+
                               <% break%>
                             <% }%>
-                          </div>
-                        <% }%>
-                        <%if((user.local.email != connections[k].username) ){%>
-                            </div>
-                            <%if(checkStatus() == "pending"){%>
-                                      <button class="disabled btn btn-info">PENDING</button>
-                                <%}else if ((checkStatus() == "connect") && (user.local.email != discover.username)){%>
-                                        <button class="connect-btn btn btn-info">CONNECT</button>
-                                <%}%>
 
-                          <% }%>
+                        <% }%>
+                          </div>
+          <%const connectionStatus= checkStatus(connections[k].username)%>
+                  <%if(connectionStatus == "pending"){%>
+                                  <button class="disabled btn btn-info">PENDING</button>
+                            <%}else if ((connectionStatus == "connect") ){%>
+                                    <button class="connect-btn btn btn-info">CONNECT</button>
+                            <%}else if ((connectionStatus == "empty")){%>
+                              <!--THIS IS EMPTY -->
+                                <%  } %>
+
+                                  </div>
+                                </div>
+                        <%}%>
+
+
 
                   </div>
 
               <% } %>
 
-       <% }%>
 
 
 

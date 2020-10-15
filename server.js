@@ -23,6 +23,8 @@ var NewsAPI = require('newsapi');
 var configAPI = require('./config/newsapi.js')
 const fetch = require("node-fetch");
 
+var nodemailer = require('nodemailer')
+
 var db
 
 // configuration ===============================================================
@@ -31,7 +33,7 @@ mongoose.set('useUnifiedTopology', true);
 mongoose.connect(configDB.url, (err, database) => {
   if (err) return console.log(err)
   db = database
-  require('./app/routes.js')(app, passport, db, multer, ObjectId, NewsAPI, configAPI, fetch);
+  require('./app/routes.js')(app, passport, db, multer, ObjectId, NewsAPI, configAPI, fetch, nodemailer);
 }); // connect to our database
 
 
