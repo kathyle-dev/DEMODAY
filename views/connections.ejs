@@ -14,7 +14,7 @@
         <div class="card users">
           <img class="profileImg"src="../<%= discover[i].imgPath%>">
           <div class="card-body">
-            <h4 class="card-title"><%= discover[i].firstname %> <%= discover[i].lastname %> </h4>
+            <a href="../profile/<%= discover[i].username %>"><h4 class="card-title"><%= discover[i].firstname %> <%= discover[i].lastname %> </h4></a>
             <h5 class="card-text"><%= discover[i].who %></h5>
               <div class="card-links">
               <% for(var j=0; j< discover[i].field.length; j++) { %>

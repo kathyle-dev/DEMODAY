@@ -38,16 +38,17 @@
                 if(checkOther=== user.local.email){
                   return "empty"
                 }
-                console.log(`CHECKING THE STATUS OF ${checkOther}`)
                  if (status =="false"){
                    for(var z = 0; z< profile[0].sentRequests.length; z++){
-                     console.log(`CHECKING AGAINST ${profile[0].sentRequests[z]}`)
                         if((profile[0].sentRequests[z]== checkOther) == true){
                            return "pending"
                          }
-                   }
-                   console.log(`CHECKING  IF ${checkOther} IS ALREADY IN ${profile[0].connections} & NOT ${user.local.email} (ME)`)
-
+                    }
+                    for(var b = 0; b< profile[0].receivedRequests.length; b++){
+                              if((profile[0].receivedRequests[b]== checkOther) == true){
+                                 return "accept"
+                               }
+                         }
                   if(profile[0].connections.find((connection)=>
                   connection===checkOther)){
                      return "empty"
@@ -56,13 +57,14 @@
               }
           } %>
 
-        <%console.log(status, "THIS IS THE STATUS")%>
-
         <%if(checkStatus(discover.username) == "pending"){%>
                   <button class="disabled btn btn-info">PENDING</button>
             <%}else if ((checkStatus(discover.username) == "connect") ){%>
                     <button class="connect-btn btn btn-info">CONNECT</button>
-            <%}else if ((checkStatus(discover.username) == "empty") ){%>
+            <%}else if ((checkStatus(discover.username) == "accept") ){%>
+                   <button data-email="<%= discover.username%>" class="accept-btn btn btn-info">ACCEPT</button>
+                   <button data-email="<%= discover.username%>" class="decline-btn btn btn-danger">DECLINE</button>
+            <%} else if ((checkStatus(discover.username) == "empty") ){%>
               <!--THIS IS EMPTY -->
                 <%  } %>
                  </div>
@@ -97,7 +99,10 @@
                                   <button class="disabled btn btn-info">PENDING</button>
                             <%}else if ((connectionStatus == "connect") ){%>
                                     <button class="connect-btn btn btn-info">CONNECT</button>
-                            <%}else if ((connectionStatus == "empty")){%>
+                          <%}else if ((connectionStatus == "accept") ){%>
+                            <button data-email="<%= connections[k].username%>" class="accept-btn btn btn-info">ACCEPT</button>
+                            <button data-email="<%= connections[k].username%>" class="decline-btn btn btn-danger">DECLINE</button>
+                            <%} else if ((connectionStatus == "empty")){%>
                               <!--THIS IS EMPTY -->
                                 <%  } %>
 
