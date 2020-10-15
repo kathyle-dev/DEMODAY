@@ -7,14 +7,14 @@
   <%- include('sidebar'); -%>
 <!-- Display feed: mix of profiles, businesses, opportunities, and discussions -->
 <div class="col-md-9">
-  <div class="still card">
+  <div class="still card center">
              <a href="/profile/<%=otherUser[0].username%>" >
                <img class="profileImg"src="../<%= otherUser[0].imgPath%>">
               <h2><%= otherUser[0].firstname %> <%= otherUser[0].lastname %></h2>
              </a>
 
         <!-- YOUR MESSAGES -->
-             <div class="col-sm-6">
+             <div class="col-md-6 card">
                 <h3>Messages</h3>
                 <ul class="messages">
                 <% for(var i=0; i<messages.length; i++) {%>
@@ -25,14 +25,15 @@
                 <% } %>
                </ul>
 
-      <!-- POST A MESSAGE -->
-      <h3>Send a Message</h3>
-      <form action="/messages" method="post">
-            <input id="otherUser" type="text" name="comment" >
-            <button id="msg-btn"  data-email="<%= otherUser[0].username %>" type="submit" name="button">Send</button>
-          </form>
+               <!-- POST A MESSAGE -->
+               <h3>Send a Message</h3>
+               <form action="/messages" method="post">
+                 <input id="otherUser" type="text" name="comment" >
+                 <button id="msg-btn"  data-email="<%= otherUser[0].username %>" type="submit" name="button" class="btn btn-info">Send</button>
+               </form>
 
-               </div>
+               </div> <!--- end of messages box -->
+
         </div>
 
 

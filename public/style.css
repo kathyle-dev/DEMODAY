@@ -63,6 +63,7 @@ h5{
 }
 .nav-link{
   font-size: 1.3rem;
+  margin-left: 6.6rem;
 }
 .navbar button{
   font-size: 1.1rem;
@@ -213,4 +214,14 @@ nav form{
     100% {
         background-size: 650%;
     }
+}
+
+/******** MESSAGE PAGE STYLING ********* */
+.center{
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+#otherUser{
+  padding: 9px;
 }

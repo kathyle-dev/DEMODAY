@@ -9,9 +9,9 @@
 <div class="col-md-9">
   <div class="still card">
          <h2>YOUR MESSAGES</h2>
-         <%if(receivedMessages.length ==0){%>
+         <%if(profile[0].connections.length ==0){%>
            <p>Make connections to chat with others!</p>
-         <%}else if (receivedMessages.length >0){%>
+         <%}else if (profile[0].connections.length >0){%>
          <p>Chat with your Connections!</p>
            <% for(var i=0; i< connections.length; i++) { %>
                   <div class="card users">
