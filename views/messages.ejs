@@ -9,9 +9,7 @@
 <div class="col-md-9">
   <div class="still card">
          <h2>YOUR MESSAGES</h2>
-          <%if (receivedMessages.length == 0){%>
-           <p>You have not received any messages!</p>
-           <h3>Start a Message with your Connections!</h3>
+         <p>Chat with your Connections!</p>
            <% for(var i=0; i< connections.length; i++) { %>
                   <div class="card users">
                     <img class="profileImg"src="../<%= connections[i].imgPath%>">
@@ -22,17 +20,6 @@
                         </div>
                         </div>
                       <% } %>
-
-          <%}else{%>
-          <% for(var i=0; i< connections.length; i++) { %>
-                 <div class="card users">
-                   <img class="profileImg"src="../<%= connections[i].imgPath%>">
-                   <div class="card-body">
-                     <h4 class="card-title"><%= connections[i].firstname %> <%= connections[i].lastname %> </h4>
-                     <h5 class="card-text"><%= connections[i].who %></h5>
-                       <a href="../messages/<%= connections[i].username %>" class=" btn btn-info">Go To Messages</a>
-                       <% } %>
-                 <% } %>
         </div>
 
 

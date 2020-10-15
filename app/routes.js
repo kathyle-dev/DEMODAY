@@ -372,14 +372,17 @@ var upload = multer({storage: storage});
              })
             var connectionUsers = result.filter((e) =>{
               return userFilter[0].connections.includes(e.username)})
+            db.collection('messages').find({receiver:req.user.local.email }).toArray((err, msg) => {
+                   if (err) return console.log(err)
                 res.render('messages.ejs', {
                     user : req.user,
                     profile: userFilter,
-                    receivedMessages:userFilter[0].receivedMessages,
+                    receivedMessages:msg,
                     connections: connectionUsers
                     })
 
             })
+        })
     });
         // ----------GO TO INDIVIDUAL PRIVATE MESSAGE ---------------------
         app.get('/messages/:username', function(req, res) {
@@ -395,17 +398,6 @@ var upload = multer({storage: storage});
                     return e.username.includes(req.params.username)
                 })
 
-                // {$or:[
-                //   {$and: [
-                //     {sender: req.user.local.email},
-                //     {reciever: username}
-                //    ]},
-                //    {$and: [
-                //      {sender: username},
-                //      {reciever: req.user.local.email}
-                //    ]}
-                //  ]}
-                console.log(req.user.local.email, "LOCAL EMAIL", username, "OTHER USER EMAIL")
             db.collection('messages').find(
                 {
         $and : [
