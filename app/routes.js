@@ -213,7 +213,25 @@ var upload = multer({storage: storage});
             })
         })
     });
-
+    // MEET OTHER USERS BY FILTER ------------------------------------
+    app.post('/search', function(req, res) {
+        db.collection('profile').find().toArray((err, result) => {
+            if (err) return console.log(err)
+            const userFilter = result.filter(function(result) {
+                if(req.user.local.email == result.username){
+                    return true
+                }
+            })
+            db.collection('profile').find({who:req.body.whoFilter, field: req.body.fieldFilter}).toArray((err, discoverRes) => {
+             if (err) return console.log(err)
+            res.render('meet.ejs', {
+                user : req.user,
+                profile: userFilter,
+                discover: discoverRes
+                })
+            })
+        })
+    });
 
     //  connection routes ========================================================
 
