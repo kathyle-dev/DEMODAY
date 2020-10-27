@@ -97,15 +97,6 @@ var upload = multer({storage: storage});
                         return true
                     }
                 })
-                // // getting random users for "discover new users" feature //
-                // const l2 = bizResults.length -1
-                // function randomNumber(min, max) {
-                //     return Math.floor(Math.random() * (max - min) + min)
-                // }
-                // const rand1 = randomNumber(0, (0.33)*l2)
-                // const rand2 = randomNumber((0.34)*l2, (0.66)*l2)
-                // const rand3 = randomNumber((0.67)*l2, l2)
-                // let bizFilter = [bizResults[rand1], bizResults[rand2], bizResults[rand3]]
                 if(userFilter[0].who === "Business"){
                     res.render('profileBis.ejs', {
                         user : req.user,
@@ -304,11 +295,11 @@ var upload = multer({storage: storage});
             });
 
           //OBJECT {} -> template/configuration for creating a message
-            const message = {
+            const msgAccepter = {
                 from: 'general.diversify@outlook.com', // Sender address
                 to: req.user.local.email,         // List of recipients
-                subject: `You are now a connection with ${req.body.username}!`, // Subject line
-                text: `Your connection request has been accepted! Go to your Messages to start chatting with ${req.body.username}.`, // Plain text body of the email i.e.
+                subject: `You are now a connection with ${req.body.name}!`, // Subject line
+                text: `You have accepted ${req.body.name}'s connection request! Go to your Messages to start chatting with ${req.body.name}.`, // Plain text body of the email i.e.
                 // html: `Embedded image: <img src="${req.body.pic}"/>`,
                 // attachments: [{
                 //     filename: 'image.png',
@@ -316,13 +307,34 @@ var upload = multer({storage: storage});
                 //     cid: 'unique@nodemailer.com' //same cid value as in the html img src
                 // }]
             };
-              transport.sendMail(message, function(err, info) { //using transport variable to use sendmail method -> send approved email to client, message is parameter
+              transport.sendMail(msgAccepter, function(err, info) { //using transport variable to use sendmail method -> send approved email to client, message is parameter
                 if (err) {
                   console.log(err)
                 } else {
                   console.log(info);
                 }
             });
+
+            //OBJECT {} -> template/configuration for creating a message
+              const msgAcceptee = {
+                  from: 'general.diversify@outlook.com', // Sender address
+                  to: req.body.username,         // List of recipients
+                  subject: `You are now a connection with ${req.body.aceptee}!`, // Subject line
+                  text: `Your connection request has been accepted! Go to your Messages to start chatting with ${req.body.aceptee}.`, // Plain text body of the email i.e.
+                  // html: `Embedded image: <img src="${req.body.pic}"/>`,
+                  // attachments: [{
+                  //     filename: 'image.png',
+                  //     path: `./public/img/${fileName}`,
+                  //     cid: 'unique@nodemailer.com' //same cid value as in the html img src
+                  // }]
+              };
+                transport.sendMail(msgAcceptee, function(err, info) { //using transport variable to use sendmail method -> send approved email to client, message is parameter
+                  if (err) {
+                    console.log(err)
+                  } else {
+                    console.log(info);
+                  }
+              });
 
             //accept and update RECEIVER PROFILE
             db.collection('profile')

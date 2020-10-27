@@ -28,19 +28,20 @@
                 </div>
               <% }%>
               </div>
-              <button data-email="<%= discover[i].username%>" class="accept-btn btn btn-info">ACCEPT!</button>
+              <button data-aceptee="<%= profile[0].firstname%>" data-name="<%= discover[i].firstname%>" data-email="<%= discover[i].username%>" class="accept-btn btn btn-info">ACCEPT!</button>
               <button data-email="<%= discover[i].username%>" class="decline-btn btn btn-danger">DECLINE</button>
               </div>
               <% } %>
-                </div>
+
       <%}%>
-  <div class="still card">
+
   <%if(receivedRequests.length == 0){%>
       <h2>NO CONNECTIONS</h2>
-        <p>You have not received connections!</p>
+        <p>You have not received any connections!</p>
         <%}
     if(sentRequests.length > 0){%>
-        <h2>PENDING CONNECTIONS</h2>
+
+        <h2 class="profUsers">PENDING CONNECTIONS</h2>
           <% for(var i=0; i< sentRequests.length; i++) { %>
             <div class="card users">
               <img class="profileImg"src="../<%= sentRequests[i].imgPath%>">
@@ -52,10 +53,10 @@
                     </div>
                   <% } %>
           <%}%>
+
+
+
 </div>
-
-
-
 
 </section>
 

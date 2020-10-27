@@ -31,11 +31,15 @@ element.addEventListener('click', function(e){
 accept.forEach(function(element) {
 element.addEventListener('click', function(e){
         const email= e.target.getAttribute("data-email")
+        const name = e.target.getAttribute("data-name")
+        const aceptee = e.target.getAttribute("data-aceptee")
              fetch('/accept', {
               method: 'put',
               headers: {'Content-Type': 'application/json'},
               body: JSON.stringify({
                  'username': email,
+                 'name': name,
+                 'aceptee': aceptee
                   })
              })
              .then(response => {

@@ -7,13 +7,13 @@
   <%- include('sidebar'); -%>
 <!-- User's Profile Page: personal information and connections made -->
 <div class="col-md-9">
-  <div class="still card">
+
 
     <div class="card-deck card odd">
         <% if (user.local.email == discover.username){%>
           <h2>YOUR PROFILE</h2>
       <%  }else{%>
-             <h2>USER PROFILE</h2>
+             <h2><%= discover.firstname.toUpperCase() %>'s PROFILE</h2>
           <% }%>
                <div class="card users">
                  <img class="profileImg"src="../<%= discover.imgPath%>">
@@ -68,14 +68,17 @@
               <!--THIS IS EMPTY -->
                 <%  } %>
                  </div>
- </div>
+
   </div>
     <!-- Display user's connections -->
 
-    <% if (connections.length>0){%>
-                <div class="card-deck card even">
 
-                    <h2><%= discover.firstname %>'s Connections!</h2>
+
+    <% if (connections.length>0){%>
+
+
+                    <h2 class="profUsers"><%= discover.firstname %>'s Connections!</h2>
+
                     <% for(var k=0; k< connections.length; k++) { %>
                         <div class="card users">
                           <img class="profileImg"src="../<%= connections[k].imgPath%>">
@@ -100,7 +103,7 @@
                             <%}else if ((connectionStatus == "connect") ){%>
                                     <button class="connect-btn btn btn-info">CONNECT</button>
                           <%}else if ((connectionStatus == "accept") ){%>
-                            <button data-email="<%= connections[k].username%>" class="accept-btn btn btn-info">ACCEPT</button>
+                            <button data-aceptee="<%= profile[0].firstname%>" data-name="<%= connections[k].firstname%>" data-email="<%= connections[k].username%>" class="accept-btn btn btn-info">ACCEPT</button>
                             <button data-email="<%= connections[k].username%>" class="decline-btn btn btn-danger">DECLINE</button>
                             <%} else if ((connectionStatus == "empty")){%>
                               <!--THIS IS EMPTY -->
@@ -122,7 +125,8 @@
 
 
 
-        </div>
+
+
     </section>
 
 <%- include('footer'); -%>
