@@ -2,8 +2,6 @@
 
 #### Project Scope: Create a Full Stack Application that requires user authentication. I chose to make an application geared towards diversifying the workforce. Users can be three types: a business, a mentor, and a mentee. They fill out a form when they first sign up that stores their "type". Based on this type, the are able to see filtered, relevant content to make their job search, talent search, or networking much easier and geared to them!
 
-- Profile Page:
-![Home Screenshot](/demoScreen.png)
 
 
 # How it was made:
